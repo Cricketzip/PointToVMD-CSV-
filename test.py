@@ -18,9 +18,11 @@ print(tline[0])
 
 frame = len(tline[0])-2
 
-nameConv = {'SPINE_NAVAL':'上半身','PELVIS':'下半身','HEAD':'頭','NECK':'首','SPINE_CHEST':'上半身2','CLAVICLE_LEFT':'左肩','SHOULDER_LEFT':'左腕','ELBOW_LEFT':'左ひじ','WRIST_LEFT':'左手首','CLAVICLE_RIGHT':'右肩','SHOULDER_RIGHT':'右腕','ELBOW_RIGHT':'右ひじ','WRIST_RIGHT':'右手首','HIP_LEFT':'左足','KNEE_LEFT':'左ひざ','ANKLE_LEFT':'左足首','HIP_RIGHT':'右足','KNEE_RIGHT':'右ひざ','ANKLE_RIGHT':'右足首','THUMB_LEFT':'左親指2','THUMB_RIGHT':'右親指2','HANDTIP_LEFT':'左人指3','HANDTIP_RIGHT':'右人指3'}
+nameConv = {'SPINE_NAVAL':'上半身','PELVIS':'腰','HEAD':'頭','NECK':'首','SPINE_CHEST':'上半身2','CLAVICLE_LEFT':'左肩','SHOULDER_LEFT':'左腕','ELBOW_LEFT':'左ひじ','WRIST_LEFT':'左手首','CLAVICLE_RIGHT':'右肩','SHOULDER_RIGHT':'右腕','ELBOW_RIGHT':'右ひじ','WRIST_RIGHT':'右手首','HIP_LEFT':'左足','KNEE_LEFT':'左ひざ','ANKLE_LEFT':'左足首','FOOT_LEFT':'左つま先','HIP_RIGHT':'右足','KNEE_RIGHT':'右ひざ','ANKLE_RIGHT':'右足首','FOOT_RIGHT':'右つま先','THUMB_LEFT':'左親指2','THUMB_RIGHT':'右親指2','HANDTIP_LEFT':'左人指3','HANDTIP_RIGHT':'右人指3','EYE_LEFT':'左目','EYE_RIGHT':'右目'}
 
-sizeOfOutput = frame * 24
+childeDic = {'SPINE_NAVAL':'SPINE_CHEST','NECK':'HEAD','SPINE_CHEST':'上半身2','CLAVICLE_LEFT':'左肩','SHOULDER_LEFT':'左腕','ELBOW_LEFT':'左ひじ','WRIST_LEFT':'左手首','CLAVICLE_RIGHT':'右肩','SHOULDER_RIGHT':'右腕','ELBOW_RIGHT':'右ひじ','WRIST_RIGHT':'右手首','HIP_LEFT':'左足','KNEE_LEFT':'左ひざ','ANKLE_LEFT':'左足首','HIP_RIGHT':'右足','KNEE_RIGHT':'右ひざ','ANKLE_RIGHT':'右足首','THUMB_LEFT':'左親指2','THUMB_RIGHT':'右親指2','HANDTIP_LEFT':'左人指3','HANDTIP_RIGHT':'右人指3','EYE_LEFT':'左目','EYE_RIGHT':'右目'}
+
+sizeOfOutput = frame * 28
 print(sizeOfOutput)
 
 output = [[0 for i in range(9)] for j in range(sizeOfOutput+6)]
@@ -38,9 +40,9 @@ for x in range(1,96,3):
             output[indexOutput][0] = nameConv[line[0][x]]
             output[indexOutput][1] = j+1
             if j < frame-1:
-                output[indexOutput][2] = float(line[j+2][x+1])/1000
-                output[indexOutput][3] = float(line[j+2][x+2])/1000
-                output[indexOutput][4] = float(line[j+2][x])/1000
+                output[indexOutput][2] = float(line[j+2][x])/12500
+                output[indexOutput][3] = float(line[j+2][x+2])/12500
+                output[indexOutput][4] = -float(line[j+2][x+1])/12500
             indexOutput = indexOutput + 1
 
 

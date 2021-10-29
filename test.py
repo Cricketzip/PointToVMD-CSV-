@@ -18,7 +18,7 @@ print(tline[0])
 
 frame = len(tline[0])-2
 
-nameConv = {'PELVIS':'センター','HEAD':'頭','NECK':'首','SPINE_NAVAL':'上半身','CLAVICLE_LEFT':'左肩','SHOULDER_LEFT':'左腕','ELBOW_LEFT':'左ひじ','WRIST_LEFT':'左手首','CLAVICLE_RIGHT':'右肩','SHOULDER_RIGHT':'右腕','ELBOW_RIGHT':'右ひじ','WRIST_RIGHT':'右手首','HIP_LEFT':'左足','KNEE_LEFT':'左ひざ','ANKLE_LEFT':'左足首','HIP_RIGHT':'右足','KNEE_RIGHT':'右ひざ','ANKLE_RIGHT':'右足首'}
+nameConv = {'SPINE_NAVAL':'センター','PELVIS':'下半身','HEAD':'頭','NECK':'首','SPINE_CHEST':'上半身','CLAVICLE_LEFT':'左肩','SHOULDER_LEFT':'左腕','ELBOW_LEFT':'左ひじ','WRIST_LEFT':'左手首','CLAVICLE_RIGHT':'右肩','SHOULDER_RIGHT':'右腕','ELBOW_RIGHT':'右ひじ','WRIST_RIGHT':'右手首','HIP_LEFT':'左足','KNEE_LEFT':'左ひざ','ANKLE_LEFT':'左足首','HIP_RIGHT':'右足','KNEE_RIGHT':'右ひざ','ANKLE_RIGHT':'右足首'}
 
 sizeOfOutput = frame * 20
 print(sizeOfOutput)

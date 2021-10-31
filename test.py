@@ -36,7 +36,7 @@ output[1][0] = '初音ミク'
 output[2][0] = sizeOfOutput
 
 ofx = 1000
-ofy = 12500
+ofy = 12000
 ofz = 1000
 
 for x in range(1,96,3):
@@ -63,9 +63,18 @@ for x in range(1,96,3):
                     radX = math.asin(ofZ/distYZ)
                     radY = math.asin(ofZ/distZX)
                     radZ = math.asin(ofY/distXY)
-                    output[indexOutput][5] = math.degrees(radX)-90
-                    output[indexOutput][6] = math.degrees(radY)-90
-                    output[indexOutput][7] = math.degrees(radZ)
+                    if line[j+2][k+1]>line[j+2][x+1]:
+                        output[indexOutput][5] = -(math.degrees(radX)+90)
+                    else:
+                        output[indexOutput][5] = (math.degrees(radX)+90)
+                    if line[j+2][k]<line[j+2][x]:
+                        output[indexOutput][6] = -(math.degrees(radY)-90)
+                    else:
+                        output[indexOutput][6] = math.degrees(radY)-90
+                    if line[j+2][k+2]>line[j+2][x+2]:
+                        output[indexOutput][7] = -(math.degrees(radZ))
+                    else:
+                        output[indexOutput][7] = math.degrees(radZ)
                 indexOutput = indexOutput + 1
         else:
             for j in range(frame):

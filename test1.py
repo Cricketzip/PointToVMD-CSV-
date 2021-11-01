@@ -1,5 +1,22 @@
 import csv #csvモジュールの読み込み(1)
 import math
+import struct
+
+def EulerToQuaternion(roll,pitch,yaw):
+    cosRoll = math.cos(roll/2.0)
+    sinRoll = math.sin(roll/2.0)
+    cosPitch = math.cos(pitch/2.0)
+    sinPitch = math.sin(pitch/2.0)
+    cosYaw = math.cos(yaw/2.0)
+    sinYaw = math.sin(yaw/2.0)
+
+    q0 = cosRoll * cosPitch * cosYaw + sinRoll * sinPitch *sinYaw
+    q1 = sinRoll * cosPitch * cosYaw - cosRoll * sinPitch * sinYaw
+    q2 = cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw
+    q3 = cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw
+
+    return q0,q1,q2,q3
+
 
 file = '20211027164608.csv' #ファイルのパスを指定(2)
 ofile = 'output.csv'
@@ -23,9 +40,9 @@ nameConv3 = {'SPINE_NAVAL':'グループ','ANKLE_LEFT':'左足首D','ANKLE_RIGHT
 
 childDic = {'SPINE_CHEST':'NECK','NECK':'HEAD','CLAVICLE_LEFT':'SHOULDER_LEFT','SHOULDER_LEFT':'ELBOW_LEFT','ELBOW_LEFT':'WRIST_LEFT','WRIST_LEFT':'HAND_LEFT','CLAVICLE_RIGHT':'SHOULDER_RIGHT','SHOULDER_RIGHT':'ELBOW_RIGHT','ELBOW_RIGHT':'WRIST_RIGHT','WRIST_RIGHT':'HAND_RIGHT','HIP_LEFT':'KNEE_LEFT','KNEE_LEFT':'ANKLE_LEFT','ANKLE_LEFT':'FOOT_LEFT','HIP_RIGHT':'KNEE_RIGHT','KNEE_RIGHT':'ANKLE_RIGHT','ANKLE_RIGHT':'FOOT_RIGHT'}
 
-place = {'ANKLE_LEFT':'左足ＩＫ','ANKLE_RIGHT':'右足ＩＫ','FOOT_LEFT':'左つま先ＩＫ','FOOT_RIGHT':'右つま先ＩＫ'}
+place = {'ANKLE_LEFT':'左足ＩＫ','ANKLE_RIGHT':'右足ＩＫ'}
 
-sizeOfOutput = frame * (len(nameConv)+len(nameConv2)+len(nameConv3))
+sizeOfOutput = frame * (len(childDic)+len(place))
 print('size : '+str(sizeOfOutput))
 
 output = [[0 for i in range(9)] for j in range(sizeOfOutput+6)]
@@ -57,21 +74,13 @@ for x in range(1,96,3):
                 distZX = math.sqrt((ofZ*ofZ)+(ofX*ofX))
                 distXY = math.sqrt((ofX*ofX)+(ofY*ofY))
                 distYZ = math.sqrt((ofY*ofY)+(ofZ*ofZ))
-                radX = math.asin(ofZ/distYZ)
-                radY = math.asin(ofZ/distZX)
-                radZ = math.asin(ofY/distXY)
-                if line[j+2][k+1]>line[j+2][x+1]:
-                    output[indexOutput][5] = -(math.degrees(radX)+90)
-                else:
-                    output[indexOutput][5] = (math.degrees(radX)+90)
-                if line[j+2][k]<line[j+2][x]:
-                    output[indexOutput][6] = -(math.degrees(radY)-90)
-                else:
-                    output[indexOutput][6] = math.degrees(radY)-90
-                #if line[j+2][k+2]>line[j+2][x+2]:
-                    #output[indexOutput][7] = -(math.degrees(radZ))
-                #else:
-                    #output[indexOutput][7] = math.degrees(radZ)
+                radX = math.atan2(ofZ,ofY)
+                radY = math.atan2(ofZ,ofX)
+                radZ = math.atan2(ofY,ofX)
+                q0,q1,q2,q3 = EulerToQuaternion(radX,radY,radZ)
+                output[indexOutput][5] = radX
+                output[indexOutput][6] = radY
+                #output[indexOutput][7] =
             indexOutput = indexOutput + 1
 
     if line[0][x] in place.keys():
@@ -90,24 +99,13 @@ for x in range(1,96,3):
                     ofZ = float(line[j+2][k+2])-float(line[j+2][x+2])
                     ofX = float(line[j+2][k])-float(line[j+2][x])
                     ofY = float(line[j+2][k+1])-float(line[j+2][x+1])
-                    distZX = math.sqrt((ofZ*ofZ)+(ofX*ofX))
-                    distXY = math.sqrt((ofX*ofX)+(ofY*ofY))
-                    distYZ = math.sqrt((ofY*ofY)+(ofZ*ofZ))
-                    radX = math.asin(ofZ/distYZ)
-                    radY = math.asin(ofZ/distZX)
-                    radZ = math.asin(ofY/distXY)
-                    if line[j+2][k+1]>line[j+2][x+1]:
-                        output[indexOutput][5] = -(math.degrees(radX)+90)
-                    else:
-                        output[indexOutput][5] = (math.degrees(radX)+90)
-                    if line[j+2][k]<line[j+2][x]:
-                        output[indexOutput][6] = -(math.degrees(radY)-90)
-                    else:
-                        output[indexOutput][6] = math.degrees(radY)-90
-                    #if line[j+2][k+2]>line[j+2][x+2]:
-                        #output[indexOutput][7] = -(math.degrees(radZ))
-                    #else:
-                        #output[indexOutput][7] = math.degrees(radZ)
+                    radX = math.atan2(ofZ,ofY)
+                    radY = math.atan2(ofZ,ofX)
+                    radZ = math.atan2(ofY,ofX)
+                    q0,q1,q2,q3 = EulerToQuaternion(radX,radY,radZ)
+                    output[indexOutput][5] = radX
+                    output[indexOutput][6] = radY
+                    #output[indexOutput][7] = q3
             indexOutput = indexOutput + 1
 
 

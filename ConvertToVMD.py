@@ -2,6 +2,9 @@ import csv
 import math
 import struct
 import sys
+import time
+
+t1 = time.time()
 
 def EulerToQuaternion(roll,pitch,yaw):
     cosRoll = math.cos(roll/2.0)
@@ -73,8 +76,8 @@ for x in range(1,96,3):
                 distXY = math.sqrt((ofX*ofX)+(ofY*ofY))
                 distYZ = math.sqrt((ofY*ofY)+(ofZ*ofZ))
                 radX = math.atan2(ofZ,ofY)
-                radY = math.atan2(ofZ,ofX)
-                radZ = math.atan2(ofY,ofX)
+                radY = math.atan2(ofZ,ofX)-90
+                radZ = math.atan2(ofY,ofX)-90
                 #クォータニオンに変換
                 q0,q1,q2,q3 = EulerToQuaternion(radX,radY,radZ)
             with open(outfile,mode='a+b') as of:#追記モードで開く
@@ -83,11 +86,11 @@ for x in range(1,96,3):
                 bposout = struct.pack('fff',0,0,0)
                 bquaout = struct.pack('ffff',q1,q2,q3,q0)
                 bfillout = struct.pack('64p',b'0')
-                of.write(bnameout)
-                of.write(bframeout)
-                of.write(bposout)
-                of.write(bquaout)
-                of.write(bfillout)
+                of.write(bnameout+bframeout+bposout+bquaout+bfillout)
+                #of.write(bframeout)
+                #of.write(bposout)
+                #of.write(bquaout)
+                #of.write(bfillout)
                 #モーションデータ数の書き込み
             of.close()
 
@@ -115,21 +118,18 @@ for x in range(1,96,3):
                     bposout = struct.pack('fff',float(line[j+2][x])/ofx,float(line[j+2][x+2])/ofy,float(line[j+2][x+1])/ofz)
                     bquaout = struct.pack('ffff',q1,q2,q3,q0)
                     bfillout = struct.pack('64p',b'0')
-                    of.write(bnameout)
-                    of.write(bframeout)
-                    of.write(bposout)
-                    of.write(bquaout)
-                    of.write(bfillout)
+                    of.write(bnameout+bframeout+bposout+bquaout+bfillout)
+                    #of.write(bframeout)
+                    #of.write(bposout)
+                    #of.write(bquaout)
+                    #of.write(bfillout)
                     #モーションデータ数の書き込み
                 of.close()
 
 with open(outfile,mode='a+b') as of:#追記モードで開く
-    numberOfskindata = struct.pack('i',0)
-    of.write(numberOfskindata)
-    numberOfcameradata = struct.pack('i',0)
-    of.write(numberOfcameradata)
-    numberOflightdata = struct.pack('i',0)
-    of.write(numberOflightdata)
-    numberOfshadowdata = struct.pack('i',0)
-    of.write(numberOfshadowdata)
+    numberOfotherdata = struct.pack('iiii',0,0,0,0)
+    of.write(numberOfotherdata)
 of.close()
+
+t2 = time.time()
+print("Elapsed time："+str(t2-t1))
